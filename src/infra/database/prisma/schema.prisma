@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+
+  generatedFileExtension = "ts"
+  moduleFormat           = "esm"
+  importFileExtension    = "ts"
+  runtime                = "nodejs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String  @id @default(uuid())
+  name         String
+  email        String
+  passwordHash String  @map("password_hash")
+  avatarUrl    String? @map("avatar_url")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  categories   Category[]
+  transactions Transaction[]
+  tokens       Token[]
+
+  @@map("users")
+}
+
+enum TokenType {
+  PASSWORD_RECOVER
+}
+
+model Token {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  type      TokenType @default(PASSWORD_RECOVER)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("tokens")
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  userId    String?  @map("user_id")
+  name      String
+  isActive  Boolean  @default(true) @map("is_active")
+  isGlobal  Boolean  @default(false) @map("is_global")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user         User?         @relation(fields: [userId], references: [id], onDelete: SetDefault)
+  transactions Transaction[]
+
+  @@map("categories")
+}
+
+enum TransactionType {
+  INCOME
+  OUTCOME
+}
+
+model Transaction {
+  id          String          @id @default(uuid())
+  categoryId  String          @map("category_id")
+  userId      String          @map("user_id")
+  description String
+  type        TransactionType
+  price       Int
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime?       @updatedAt @map("updated_at")
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("transactions")
+}

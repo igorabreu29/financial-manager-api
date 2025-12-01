@@ -10,3 +10,30 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - ./docker/setup.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - financial
+
+  financial-manager-api:
+    build: .
+    container_name: financial_manager
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${PORT}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+      - JWT_SECRET=${JWT_SECRET}
+      - MAIL_SECURE=${MAIL_SECURE}
+      - MAIL_HOST=${MAIL_HOST}
+      - MAIL_PORT=${MAIL_PORT}
+      - MAIL_USER=${MAIL_USER}
+      - MAIL_PASS=${MAIL_PASS}
+      - WEB_URL=${WEB_URL}
+    ports:
+      - 3333:3333
+    depends_on:
+      - postgres
+    networks:
+      - financial
+
+networks:
+  financial:
+    driver: bridge

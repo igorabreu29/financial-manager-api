@@ -8,6 +8,9 @@
     "dev": "tsx watch --env-file .env src/infra/http/server.ts",
     "test": "vitest run",
     "test:watch": "vitest",
+    "start": "pnpm prisma:deploy && node --watch ./dist/infra/http/server.js",
+    "compose:up": "docker compose -f docker-compose.test.yaml up -d",
+    "build": "tsup",
     "lint:fix": "biome check --write src",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:generate": "prisma generate"

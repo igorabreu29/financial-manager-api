@@ -3,7 +3,11 @@ import 'dotenv/config'
 import path from 'node:path'
 import { defineConfig, env } from 'prisma/config'
 
-const schema = 'src/infra/database/prisma'
+if (!process.env.PATH_TO_PRISMA) {
+	throw new Error("PATH_TO_PRISMA variable is required!");
+}
+
+const schema = process.env.PATH_TO_PRISMA;
 
 export default defineConfig({
 	schema: path.join(schema, 'schema.prisma'),

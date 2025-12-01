@@ -1,38 +1,45 @@
-FROM node:22.11.0 AS base
+FROM node:24.7-alpine3.21 AS base
+
+WORKDIR /usr/src/app
 
 RUN npm i -g pnpm
 
-FROM base AS dependencies
+FROM base AS build
 
-WORKDIR /usr/app
+WORKDIR /usr/src/app
 
 COPY package.json pnpm-lock.yaml ./
 
-RUN pnpm install
-
-FROM base AS build
-
-WORKDIR /usr/app
+RUN pnpm install --frozen-lockfile
 
 COPY . .
-COPY --from=dependencies /usr/app/node_modules ./node_modules
 
-RUN pnpm build
-RUN pnpm prune --prod
-
-FROM node:22.11.0-alpine3.20 AS deploy 
-
-WORKDIR /usr/app
-
-RUN npm i -g pnpm prisma
-
-COPY --from=build /usr/app/dist ./dist
-COPY --from=build /usr/app/node_modules ./node_modules
-COPY --from=build /usr/app/package.json ./package.json
-COPY --from=build /usr/app/prisma ./prisma
+ENV PATH_TO_PRISMA=src/infra/database/prisma
 
 RUN pnpm prisma generate
+RUN pnpm build
 
-EXPOSE 3333 
+FROM base AS release
 
-CMD ["pnpm", "start"]
+WORKDIR /usr/src/app
+
+COPY package.json pnpm-lock.yaml ./
+
+RUN pnpm install --prod --frozen-lockfile
+
+COPY --from=build /usr/src/app/dist ./dist
+COPY --from=build /usr/src/app/prisma.config.ts ./prisma.config.ts
+COPY --from=build /usr/src/app/src/infra/database/prisma/migrations ./prisma/migrations
+COPY --from=build /usr/src/app/src/infra/database/prisma/schema.prisma ./prisma/schema.prisma
+COPY --from=build /usr/src/app/src/infra/database/generated ./dist/infra/database/generated
+
+EXPOSE 3333
+
+ENV PORT=3333
+ENV NODE_ENV=production
+ENV HOST="0.0.0.0"
+ENV PATH_TO_PRISMA=./prisma
+
+ENTRYPOINT ["pnpm", "start"]
+
+RUN pnpm rm prisma

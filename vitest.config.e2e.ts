@@ -10,7 +10,7 @@ export default defineConfig({
     }),
   ],
   test: {
-    setupFiles: ["./tests/setup.ts"],
+    setupFiles: ["./tests/setup-e2e.ts"],
     include: ["**/*.e2e-spec.ts"],
     testTimeout: 60_000,
     hookTimeout: 60_000,

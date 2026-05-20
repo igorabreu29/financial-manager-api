@@ -28,6 +28,11 @@ export type User = Prisma.UserModel
  */
 export type Token = Prisma.TokenModel
 /**
+ * Model Wallet
+ * 
+ */
+export type Wallet = Prisma.WalletModel
+/**
  * Model Category
  * 
  */

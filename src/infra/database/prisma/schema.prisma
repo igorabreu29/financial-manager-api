@@ -25,6 +25,7 @@ model User {
   categories   Category[]
   transactions Transaction[]
   tokens       Token[]
+  wallets      Wallet[]
 
   @@map("users")
 }
@@ -43,6 +44,20 @@ model Token {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("tokens")
+}
+
+model Wallet {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  name        String
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@map("wallets")
 }
 
 model Category {
@@ -68,6 +83,7 @@ model Transaction {
   id          String          @id @default(uuid())
   categoryId  String          @map("category_id")
   userId      String          @map("user_id")
+  walletId    String          @map("wallet_id")
   description String
   type        TransactionType
   price       Int
@@ -76,6 +92,7 @@ model Transaction {
 
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet   Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
 
   @@map("transactions")
 }

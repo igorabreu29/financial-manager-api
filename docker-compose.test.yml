@@ -1,7 +1,7 @@
 services:
   postgres:
     container_name: financial-db
-    image: postgres:17
+    image: postgres:18
     ports:
       - 5432:5432
     environment:

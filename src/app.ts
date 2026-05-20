@@ -24,6 +24,24 @@ app.register(fastifyCors, {
 	allowedHeaders: ["GET", "PATCH", "POST", "OPTIONS", "PUT", "DELETE"],
 });
 
+app.register(import("@fastify/helmet"), {
+	contentSecurityPolicy: {
+		directives: {
+			defaultSrc: ["'self'"],
+			styleSrc: ["'self'", "https:", "'unsafe-inline'"],
+			scriptSrc: ["'self'", "https:", "'unsafe-inline'"],
+			imgSrc: ["'self'", "data:", "https:"],
+			fontSrc: ["'self'", "https:", "data:"],
+			connectSrc: ["'self'", "https:"],
+		},
+	},
+	crossOriginEmbedderPolicy: true,
+	crossOriginOpenerPolicy: { policy: "same-origin" },
+	crossOriginResourcePolicy: { policy: "cross-origin" },
+	referrerPolicy: { policy: "no-referrer" },
+	frameguard: { action: "deny" },
+});
+
 app.register(fastifyJwt, {
 	secret: env.JWT_SECRET,
 });

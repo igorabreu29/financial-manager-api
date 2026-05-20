@@ -13,6 +13,7 @@ export function makeTransaction(
 		{
 			categoryId: new UniqueEntityId(),
 			userId: new UniqueEntityId(),
+			walletId: new UniqueEntityId(),
 			description: faker.lorem.sentence(),
 			price: Number(faker.finance.amount()),
 			type: "income",

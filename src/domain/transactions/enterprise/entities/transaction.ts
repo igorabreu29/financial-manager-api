@@ -10,6 +10,7 @@ export interface TransactionProps {
 	price: number;
 	categoryId: UniqueEntityId;
 	userId: UniqueEntityId;
+	walletId: UniqueEntityId;
 	createdAt: Date;
 	updatedAt: Date | null;
 }

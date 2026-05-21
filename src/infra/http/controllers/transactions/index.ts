@@ -2,13 +2,17 @@ import type { FastifyPluginCallbackZod } from "fastify-type-provider-zod";
 import { activeCategory } from "./active-category.ts";
 import { createCategory } from "./create-category.ts";
 import { createTransaction } from "./create-transaction.ts";
+import { createWallet } from "./create-wallet.ts";
 import { deleteCategory } from "./delete-category.ts";
 import { deleteTransaction } from "./delete-transaction.ts";
+import { deleteWallet } from "./delete-wallet.ts";
 import { disableCategory } from "./disable-category.ts";
 import { getActiveCategories } from "./get-active-categories.ts";
 import { getCategories } from "./get-categories.ts";
 import { getTransactions } from "./get-transactions.ts";
+import { getWallets } from "./get-wallets.ts";
 import { updateCategory } from "./update-category.ts";
+import { updateWallet } from "./update-wallet.ts";
 
 export const transactions: FastifyPluginCallbackZod = app => {
 	app.register(getActiveCategories);
@@ -21,4 +25,8 @@ export const transactions: FastifyPluginCallbackZod = app => {
 	app.register(getTransactions);
 	app.register(createTransaction);
 	app.register(deleteTransaction);
+	app.register(createWallet);
+	app.register(updateWallet);
+	app.register(deleteWallet);
+	app.register(getWallets);
 };

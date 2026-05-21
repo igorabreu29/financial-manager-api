@@ -7,9 +7,9 @@ async function main() {
 		await prisma.$connect();
 
 		await app.listen({ port: env.PORT, host: "0.0.0.0" });
-		console.log(`Server running on port 3333 (/docs)`);
+		app.log.info(`Server running on port ${env.PORT} (/docs)`);
 	} catch (error) {
-		console.error(error);
+		app.log.error(error, "Fatal error during startup");
 		await prisma.$disconnect();
 	}
 }

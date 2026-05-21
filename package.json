@@ -9,7 +9,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "start": "pnpm prisma:deploy && node --watch ./dist/infra/http/server.js",
-    "compose:up": "docker compose -f docker-compose.test.yaml up -d",
+    "compose:up": "docker compose -f docker-compose.test.yml up -d",
     "build": "tsup",
     "lint:fix": "biome check --write src",
     "prisma:deploy": "prisma migrate deploy",

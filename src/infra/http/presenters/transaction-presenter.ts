@@ -4,6 +4,7 @@ export class TransactionPresenter {
 	static toHTTP(transaction: Transaction) {
 		return {
 			id: transaction.id.toValue(),
+			wallet_id: transaction.props.walletId.toValue(),
 			category_id: transaction.props.categoryId.toValue(),
 			user_id: transaction.props.userId.toValue(),
 			description: transaction.props.description,

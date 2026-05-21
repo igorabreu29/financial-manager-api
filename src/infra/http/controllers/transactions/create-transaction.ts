@@ -8,14 +8,15 @@ import { makeCreateTransactionUseCase } from "./factories/make-create-transactio
 
 export const createTransaction: FastifyPluginCallbackZod = app => {
 	app.post(
-		"/categories/:categoryId/transactions",
+		"/wallets/:walletId/categories/:categoryId/transactions",
 		{
 			onRequest: [verifyJWT],
 			schema: {
 				summary: "Create Transaction",
 				tags: ["transactions"],
 				params: z.object({
-					categoryId: z.uuidv4(),
+					walletId: z.uuidv4({ error: "Invalid UUID." }),
+					categoryId: z.uuidv4({ error: "Invalid UUID." }),
 				}),
 				body: z.object({
 					description: z
@@ -30,6 +31,7 @@ export const createTransaction: FastifyPluginCallbackZod = app => {
 					201: z.object({
 						transaction: z.object({
 							id: z.uuidv4(),
+							wallet_id: z.uuidv4(),
 							user_id: z.uuidv4(),
 							category_id: z.uuidv4(),
 							description: z.string(),
@@ -43,12 +45,13 @@ export const createTransaction: FastifyPluginCallbackZod = app => {
 		},
 		async (req, res) => {
 			const payload = req.user;
-			const { categoryId } = req.params;
+			const { walletId, categoryId } = req.params;
 			const { price, description, type } = req.body;
 
 			const useCase = makeCreateTransactionUseCase();
 			const result = await useCase.execute({
 				categoryId,
+				walletId,
 				description,
 				price,
 				type,

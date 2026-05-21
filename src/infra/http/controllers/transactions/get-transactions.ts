@@ -24,6 +24,7 @@ export const getTransactions: FastifyPluginCallbackZod = app => {
 						transactions: z.array(
 							z.object({
 								id: z.uuidv4(),
+								wallet_id: z.uuidv4(),
 								user_id: z.uuidv4(),
 								category_id: z.uuidv4(),
 								description: z.string(),

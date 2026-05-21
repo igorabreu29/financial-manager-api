@@ -9,28 +9,15 @@ import {
 } from "fastify-type-provider-zod";
 import { env } from "@/infra/env/index.ts";
 import { errorHandler } from "./error-handler.ts";
-import requestContextPlugin from "./infra/http/plugins/request-context-plugin.ts";
 import { accounts } from "./infra/http/controllers/accounts/index.ts";
 import { healthCheck } from "./infra/http/controllers/health.ts";
 import { transactions } from "./infra/http/controllers/transactions/index.ts";
+import { loggerConfig } from "./infra/http/logger/logger-config.ts";
+import requestContextPlugin from "./infra/http/plugins/request-context-plugin.ts";
 
-const loggerConfig =
-	env.NODE_ENV === "production"
-		? true
-		: env.NODE_ENV === "test"
-			? false
-			: {
-					transport: {
-						target: "pino-pretty",
-						options: {
-							colorize: true,
-							translateTime: "HH:MM:ss",
-							ignore: "pid,hostname",
-						},
-					},
-				};
-
-export const app = fastify({ logger: loggerConfig }).withTypeProvider<ZodTypeProvider>();
+export const app = fastify({
+	logger: loggerConfig(),
+}).withTypeProvider<ZodTypeProvider>();
 app.setSerializerCompiler(serializerCompiler);
 app.setValidatorCompiler(validatorCompiler);
 

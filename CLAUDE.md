@@ -30,7 +30,7 @@ This is a **Clean Architecture / DDD** API built with Fastify + Prisma + TypeScr
 src/core/           # Shared primitives: Either, base entities, domain events, generic errors
 src/domain/         # Business logic (no framework dependencies)
   accounts/         # Bounded context: users, auth, password reset
-  transactions/     # Bounded context: categories, transactions
+  transactions/     # Bounded context: categories, transactions, wallets
 src/infra/          # Framework/infrastructure implementations
   http/             # Fastify controllers, presenters, error mapping
   database/         # Prisma adapters, mappers, generated client

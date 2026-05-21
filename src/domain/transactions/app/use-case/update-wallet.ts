@@ -41,6 +41,7 @@ export class UpdateWalletUseCase {
 				description,
 				userId: wallet.props.userId,
 				createdAt: wallet.props.createdAt,
+				updatedAt: new Date(),
 			},
 			wallet.id
 		);

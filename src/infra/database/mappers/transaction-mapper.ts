@@ -10,6 +10,7 @@ interface TransactionPersistance {
 	price: number;
 	categoryId: string;
 	userId: string;
+	walletId: string;
 	createdAt: Date;
 	updatedAt: Date | null;
 }
@@ -20,6 +21,7 @@ export class TransactionMapper {
 			{
 				categoryId: new UniqueEntityId(transaction.categoryId),
 				userId: new UniqueEntityId(transaction.userId),
+				walletId: new UniqueEntityId(transaction.walletId),
 				description: transaction.description,
 				price: transaction.price,
 				type: TransactionTypeMapper.toDomain(transaction.type),
@@ -35,6 +37,7 @@ export class TransactionMapper {
 			id: transaction.id.toValue(),
 			categoryId: transaction.props.categoryId.toValue(),
 			userId: transaction.props.userId.toValue(),
+			walletId: transaction.props.walletId.toValue(),
 			description: transaction.props.description,
 			price: transaction.props.price,
 			type: TransactionTypeMapper.toDatabase(transaction.props.type),

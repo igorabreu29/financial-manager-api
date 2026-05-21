@@ -17,16 +17,18 @@ import { transactions } from "./infra/http/controllers/transactions/index.ts";
 const loggerConfig =
 	env.NODE_ENV === "production"
 		? true
-		: {
-				transport: {
-					target: "pino-pretty",
-					options: {
-						colorize: true,
-						translateTime: "HH:MM:ss",
-						ignore: "pid,hostname",
+		: env.NODE_ENV === "test"
+			? false
+			: {
+					transport: {
+						target: "pino-pretty",
+						options: {
+							colorize: true,
+							translateTime: "HH:MM:ss",
+							ignore: "pid,hostname",
+						},
 					},
-				},
-			};
+				};
 
 export const app = fastify({ logger: loggerConfig }).withTypeProvider<ZodTypeProvider>();
 app.setSerializerCompiler(serializerCompiler);

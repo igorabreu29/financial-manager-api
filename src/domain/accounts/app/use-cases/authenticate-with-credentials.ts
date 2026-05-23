@@ -1,7 +1,10 @@
+import { randomUUID } from "node:crypto";
 import { type Either, failure, success } from "@/core/either.ts";
 import type { User } from "../../enterprise/entities/user.ts";
+import { RefreshToken } from "../../enterprise/entities/refresh-token.ts";
 import type { Encrypter } from "../cryptography/encrypter.ts";
 import type { Hasher } from "../cryptography/hasher.ts";
+import type { RefreshTokensRepository } from "../repositories/refresh-tokens-repository.ts";
 import type { UsersRepository } from "../repositories/users-repository.ts";
 import { WrongCredentialsError } from "./errors/wrong-credentials-error.ts";
 
@@ -13,7 +16,8 @@ interface AuthenticateWithCredentialsUseCaseRequest {
 type AuthenticateWithCredentialsUseCaseResponse = Either<
 	WrongCredentialsError,
 	{
-		token: string;
+		accessToken: string;
+		refreshToken: string;
 		user: User;
 	}
 >;
@@ -22,7 +26,8 @@ export class AuthenticateWithCredentialsUseCase {
 	constructor(
 		private usersRepository: UsersRepository,
 		private hasher: Hasher,
-		private encrypter: Encrypter
+		private encrypter: Encrypter,
+		private refreshTokensRepository: RefreshTokensRepository
 	) {}
 
 	public async execute({
@@ -38,12 +43,22 @@ export class AuthenticateWithCredentialsUseCase {
 		);
 		if (!passwordsMatch) return failure(new WrongCredentialsError());
 
-		const token = this.encrypter.encrypt({
+		const accessToken = this.encrypter.encrypt({
 			sub: user.id.toValue(),
 		});
 
+		const refreshTokenValue = randomUUID();
+		const refreshToken = RefreshToken.create({
+			userId: user.id,
+			token: refreshTokenValue,
+			expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+		});
+
+		await this.refreshTokensRepository.create(refreshToken);
+
 		return success({
-			token,
+			accessToken,
+			refreshToken: refreshTokenValue,
 			user,
 		});
 	}

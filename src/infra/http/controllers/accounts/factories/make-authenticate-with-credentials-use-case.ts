@@ -8,6 +8,7 @@ export function makeAuthenticateWithCredentialsUseCase() {
 	const hasher = new BcryptHasher();
 	const encrypter = new JWTEncrypter();
 
+	// TODO: wire refreshTokensRepository once PrismaRefreshTokensRepository is available (Task 10)
 	return new AuthenticateWithCredentialsUseCase(
 		usersRepository,
 		hasher,

@@ -2,6 +2,8 @@ import { Entity } from "@/core/entities/entity.ts";
 import type { UniqueEntityId } from "@/core/entities/unique-entity-id.ts";
 import type { Optional } from "@/core/types/optional.ts";
 
+export const REFRESH_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
 export interface RefreshTokenProps {
 	userId: UniqueEntityId;
 	token: string;

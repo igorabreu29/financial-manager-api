@@ -67,6 +67,7 @@ describe("Authenticate With Credentials Use Case", async () => {
 
 		expect(result.value.accessToken).toBeDefined();
 		expect(result.value.refreshToken).toBeDefined();
+		expect(result.value.refreshToken).toEqual(refreshTokensRepository.items[0].props.token);
 		expect(result.value.user.id).toEqual(user.id);
 		expect(refreshTokensRepository.items).toHaveLength(1);
 		expect(refreshTokensRepository.items[0].props.userId).toEqual(user.id);

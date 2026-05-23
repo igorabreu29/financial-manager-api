@@ -3,7 +3,7 @@ import type { RefreshToken } from "@/domain/accounts/enterprise/entities/refresh
 import { RefreshTokenMapper } from "../mappers/refresh-token-mapper.ts";
 import { prisma } from "../prisma.ts";
 
-export class PrismaRefreshTokensRepository implements RefreshTokensRepository {
+export class RefreshTokensRepositoryAdapter implements RefreshTokensRepository {
 	async findByToken(token: string): Promise<RefreshToken | null> {
 		const raw = await prisma.refreshToken.findUnique({ where: { token } });
 		if (!raw) return null;

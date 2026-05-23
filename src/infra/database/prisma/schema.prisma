@@ -22,10 +22,11 @@ model User {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
 
-  categories   Category[]
-  transactions Transaction[]
-  tokens       Token[]
-  wallets      Wallet[]
+  categories    Category[]
+  transactions  Transaction[]
+  tokens        Token[]
+  wallets       Wallet[]
+  refreshTokens RefreshToken[]
 
   @@map("users")
 }
@@ -44,6 +45,18 @@ model Token {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("tokens")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
 }
 
 model Wallet {

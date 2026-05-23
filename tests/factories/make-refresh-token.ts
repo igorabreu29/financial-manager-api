@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { UniqueEntityId } from "@/core/entities/unique-entity-id.ts";
 import {
 	RefreshToken,
@@ -11,7 +12,7 @@ export function makeRefreshToken(
 	return RefreshToken.create(
 		{
 			userId: new UniqueEntityId(),
-			token: "fake-refresh-token-uuid",
+			token: randomUUID(),
 			expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 			...override,
 		},

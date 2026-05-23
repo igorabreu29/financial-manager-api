@@ -16,6 +16,7 @@ export class InMemoryRefreshTokensRepository
 
 	async delete(refreshToken: RefreshToken): Promise<void> {
 		const index = this.items.findIndex(item => item.equals(refreshToken));
+		if (index === -1) return;
 		this.items.splice(index, 1);
 	}
 

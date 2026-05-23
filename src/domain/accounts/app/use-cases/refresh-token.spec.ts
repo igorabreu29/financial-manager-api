@@ -54,5 +54,8 @@ describe("Refresh Token Use Case", () => {
 		expect(refreshTokensRepository.items[0].props.token).toBe(
 			result.value.refreshToken
 		);
+		expect(refreshTokensRepository.items[0].props.userId).toEqual(
+			existing.props.userId
+		);
 	});
 });

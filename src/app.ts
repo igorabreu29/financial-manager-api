@@ -1,3 +1,4 @@
+import fastifyCookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
 import fastifyJwt from "@fastify/jwt";
 import fastify from "fastify";
@@ -25,9 +26,13 @@ app.setErrorHandler(errorHandler);
 
 app.register(requestContextPlugin);
 
+app.register(fastifyCookie);
+
 app.register(fastifyCors, {
-	origin: env.NODE_ENV === "production" ? [] : "*",
-	allowedHeaders: ["GET", "PATCH", "POST", "OPTIONS", "PUT", "DELETE"],
+	origin: env.WEB_URL,
+	credentials: true,
+	methods: ["GET", "PATCH", "POST", "OPTIONS", "PUT", "DELETE"],
+	allowedHeaders: ["Content-Type", "Authorization"],
 });
 
 app.register(import("@fastify/helmet"), {
@@ -50,6 +55,10 @@ app.register(import("@fastify/helmet"), {
 
 app.register(fastifyJwt, {
 	secret: env.JWT_SECRET,
+	cookie: {
+		cookieName: "access_token",
+		signed: false,
+	},
 });
 
 await app.register(import("@fastify/swagger"), {
@@ -60,18 +69,14 @@ await app.register(import("@fastify/swagger"), {
 		},
 		components: {
 			securitySchemes: {
-				bearerAuth: {
-					type: "http",
-					scheme: "bearer",
-					bearerFormat: "JWT",
+				cookieAuth: {
+					type: "apiKey",
+					in: "cookie",
+					name: "access_token",
 				},
 			},
 		},
-		security: [
-			{
-				bearerAuth: [],
-			},
-		],
+		security: [{ cookieAuth: [] }],
 	},
 	transform: jsonSchemaTransform,
 });

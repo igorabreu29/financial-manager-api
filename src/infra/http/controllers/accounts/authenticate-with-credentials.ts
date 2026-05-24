@@ -3,6 +3,7 @@ import z from "zod";
 import { dispatchError } from "../../errors/dispatch-error.ts";
 import { UserPresenter } from "../../presenters/user-presenter.ts";
 import { StatusCode } from "../../utils/status-code.ts";
+import { setCookies } from "../../utils/set-auth-cookies.ts";
 import { makeAuthenticateWithCredentialsUseCase } from "./factories/make-authenticate-with-credentials-use-case.ts";
 
 export const authenticateWithCredentials: FastifyPluginCallbackZod = app => {
@@ -25,7 +26,6 @@ export const authenticateWithCredentials: FastifyPluginCallbackZod = app => {
 				}),
 				response: {
 					201: z.object({
-						token: z.jwt(),
 						user: z.object({
 							id: z.uuidv4(),
 							name: z.string(),
@@ -41,20 +41,18 @@ export const authenticateWithCredentials: FastifyPluginCallbackZod = app => {
 			const { email, password } = req.body;
 
 			const useCase = makeAuthenticateWithCredentialsUseCase();
-			const result = await useCase.execute({
-				email,
-				password,
-			});
+			const result = await useCase.execute({ email, password });
 
 			if (result.failure()) {
 				throw dispatchError(result.value);
 			}
 
-			const { user, token } = result.value;
+			const { user, accessToken, refreshToken } = result.value;
+
+			setCookies(res, accessToken, refreshToken);
 
 			return res.status(StatusCode.CREATED).send({
 				user: UserPresenter.toHTTP(user),
-				token,
 			});
 		}
 	);

@@ -48,7 +48,6 @@ describe("POST /accounts/sign-out (E2E)", () => {
 
 		expect(clearedAccessCookie).toBeDefined();
 		expect(clearedRefreshCookie).toBeDefined();
-		// fastify clearCookie sets maxAge=0 to expire the cookie
 		expect(clearedAccessCookie!.maxAge).toBe(0);
 		expect(clearedRefreshCookie!.maxAge).toBe(0);
 	});

@@ -10,7 +10,7 @@ export default defineConfig({
 		}),
 	],
 	test: {
-		include: ["**/*.e2e.spec.ts"],
+		include: ["src/**/*.e2e.spec.ts"],
 		setupFiles: ["tests/setup-e2e.ts"],
 		coverage: {
 			enabled: false,

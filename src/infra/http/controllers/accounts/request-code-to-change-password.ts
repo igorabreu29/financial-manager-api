@@ -12,7 +12,7 @@ export const requestCode: FastifyPluginCallbackZod = app => {
 				summary: "Request code to change user password",
 				tags: ["accounts"],
 				body: z.object({
-					email: z.url({ error: "Invalid e-mail format." }),
+					email: z.email({ error: "Invalid e-mail format." }),
 				}),
 				response: {
 					204: z.null(),
@@ -29,7 +29,7 @@ export const requestCode: FastifyPluginCallbackZod = app => {
 				throw dispatchError(result.value);
 			}
 
-			return res.status(StatusCode.NO_CONTENT).send();
+			return res.status(StatusCode.NO_CONTENT).send(null);
 		}
 	);
 };

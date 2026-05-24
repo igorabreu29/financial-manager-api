@@ -1,6 +1,10 @@
 import type { FastifyRequest } from "fastify";
+import { UnauthorizedError } from "../errors/unauthorized-error.ts";
 
 export async function verifyJWT(req: FastifyRequest) {
-	const payload = await req.jwtVerify();
-	return payload;
+	try {
+		await req.jwtVerify();
+	} catch {
+		throw new UnauthorizedError("Invalid or missing access token.");
+	}
 }

@@ -21,7 +21,7 @@ export function setCookies(
 			secure: isProduction,
 			sameSite: "lax",
 			maxAge: 7 * 24 * 60 * 60,
-			path: "/accounts/refresh",
+			path: "/accounts",
 		});
 }
 
@@ -29,5 +29,5 @@ export function clearCookies(res: FastifyReply): void {
 	const base = { httpOnly: true, secure: isProduction, sameSite: "lax" as const };
 	res
 		.clearCookie("access_token", { ...base, path: "/" })
-		.clearCookie("refresh_token", { ...base, path: "/accounts/refresh" });
+		.clearCookie("refresh_token", { ...base, path: "/accounts" });
 }

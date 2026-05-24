@@ -10,6 +10,7 @@ export default defineConfig({
     }),
   ],
   test: {
+    exclude: ["**/*.e2e.spec.ts", "**/node_modules/**"],
     coverage: {
       enabled: false,
     },

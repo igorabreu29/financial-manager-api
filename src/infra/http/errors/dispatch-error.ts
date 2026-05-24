@@ -12,7 +12,11 @@ import { UnauthorizedError } from "./unauthorized-error.ts";
 export function dispatchError(error: Error) {
 	const errorClassName = error.constructor.name;
 
-	if ([InvalidRefreshTokenError.name].includes(errorClassName)) {
+	if (
+		[InvalidRefreshTokenError.name, WrongCredentialsError.name].includes(
+			errorClassName
+		)
+	) {
 		return new UnauthorizedError(error.message);
 	}
 
@@ -27,11 +31,9 @@ export function dispatchError(error: Error) {
 	}
 
 	if (
-		[
-			WrongCredentialsError.name,
-			PasswordsDontMatch.name,
-			ResourceAlreadyExistsError.name,
-		].includes(errorClassName)
+		[PasswordsDontMatch.name, ResourceAlreadyExistsError.name].includes(
+			errorClassName
+		)
 	) {
 		return new ConflictError(error.message);
 	}

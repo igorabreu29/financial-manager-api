@@ -14,7 +14,7 @@ export interface UserProps {
 
 export class User extends AggregateRoot<UserProps> {
 	static create(
-		props: Optional<UserProps, "createdAt" | "avatarUrl">,
+		props: Optional<UserProps, "createdAt" | "avatarUrl" | "updatedAt">,
 		id?: UniqueEntityId
 	) {
 		const user = new User(

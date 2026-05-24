@@ -1,5 +1,6 @@
 import { execSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { config } from "dotenv";
 import { afterAll, beforeAll, beforeEach } from "vitest";
 import { PrismaClient } from "@/infra/database/generated/prisma/client.ts";
@@ -21,7 +22,13 @@ function generateDatabaseUrl(schemaId: string) {
 
 process.env.DATABASE_URL = generateDatabaseUrl(schemaId);
 
-const prisma = new PrismaClient();
+const testUrl = new URL(process.env.DATABASE_URL);
+testUrl.searchParams.delete("schema");
+const adapter = new PrismaPg(
+	{ connectionString: testUrl.toString() },
+	{ schema: schemaId }
+);
+const prisma = new PrismaClient({ adapter });
 
 beforeAll(async () => {
 	execSync("pnpm prisma db push", {
@@ -32,11 +39,11 @@ beforeAll(async () => {
 beforeEach(async () => {
 	const tables = await prisma.$queryRaw<
 		Array<{ tablename: string }>
-	>`SELECT tablename FROM pg_tables WHERE schemaname='public'`;
+	>`SELECT tablename FROM pg_tables WHERE schemaname=${schemaId}`;
 
 	for (const { tablename } of tables) {
 		await prisma.$executeRawUnsafe(
-			`TRUNCATE TABLE "${tablename}" RESTART IDENTITY CASCADE;`
+			`TRUNCATE TABLE "${schemaId}"."${tablename}" RESTART IDENTITY CASCADE;`
 		);
 	}
 });

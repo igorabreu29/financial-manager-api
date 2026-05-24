@@ -55,7 +55,11 @@ describe("POST /accounts/sign-on (E2E)", () => {
 		const response = await app.inject({
 			method: "POST",
 			url: "/accounts/sign-on",
-			body: { name: "AB", email: faker.internet.email(), password: "pass123456" },
+			body: {
+				name: "AB",
+				email: faker.internet.email(),
+				password: "pass123456",
+			},
 		});
 
 		expect(response.statusCode).toBe(400);
@@ -65,7 +69,11 @@ describe("POST /accounts/sign-on (E2E)", () => {
 		const response = await app.inject({
 			method: "POST",
 			url: "/accounts/sign-on",
-			body: { name: faker.person.fullName(), email: "not-an-email", password: "pass123456" },
+			body: {
+				name: faker.person.fullName(),
+				email: "not-an-email",
+				password: "pass123456",
+			},
 		});
 
 		expect(response.statusCode).toBe(400);
@@ -75,7 +83,11 @@ describe("POST /accounts/sign-on (E2E)", () => {
 		const response = await app.inject({
 			method: "POST",
 			url: "/accounts/sign-on",
-			body: { name: faker.person.fullName(), email: faker.internet.email(), password: "abc" },
+			body: {
+				name: faker.person.fullName(),
+				email: faker.internet.email(),
+				password: "abc",
+			},
 		});
 
 		expect(response.statusCode).toBe(400);

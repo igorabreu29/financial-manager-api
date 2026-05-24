@@ -1,5 +1,5 @@
-import { faker } from "@faker-js/faker";
 import { randomUUID } from "node:crypto";
+import { faker } from "@faker-js/faker";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { app } from "@/app.ts";
 
@@ -19,7 +19,9 @@ async function authenticate() {
 		body: { email, password },
 	});
 
-	return { access_token: res.cookies.find(c => c.name === "access_token")!.value };
+	return {
+		access_token: res.cookies.find(c => c.name === "access_token")!.value,
+	};
 }
 
 async function createTransaction(cookies: { access_token: string }) {
@@ -44,7 +46,11 @@ async function createTransaction(cookies: { access_token: string }) {
 		method: "POST",
 		url: `/wallets/${walletId}/categories/${categoryId}/transactions`,
 		cookies,
-		body: { description: faker.commerce.productName(), type: "income", price: 1000 },
+		body: {
+			description: faker.commerce.productName(),
+			type: "income",
+			price: 1000,
+		},
 	});
 
 	return txRes.json().transaction.id as string;

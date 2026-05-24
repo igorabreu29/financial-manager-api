@@ -31,7 +31,9 @@ describe("POST /accounts/sign-in (E2E)", () => {
 		expect(response.json()).toMatchObject({ user: { email } });
 
 		const accessCookie = response.cookies.find(c => c.name === "access_token");
-		const refreshCookie = response.cookies.find(c => c.name === "refresh_token");
+		const refreshCookie = response.cookies.find(
+			c => c.name === "refresh_token"
+		);
 
 		expect(accessCookie).toBeDefined();
 		expect(accessCookie?.httpOnly).toBe(true);
@@ -50,7 +52,11 @@ describe("POST /accounts/sign-in (E2E)", () => {
 		await app.inject({
 			method: "POST",
 			url: "/accounts/sign-on",
-			body: { name: faker.person.fullName(), email, password: "correctpassword" },
+			body: {
+				name: faker.person.fullName(),
+				email,
+				password: "correctpassword",
+			},
 		});
 
 		const response = await app.inject({

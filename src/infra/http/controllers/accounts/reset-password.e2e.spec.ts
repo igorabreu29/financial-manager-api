@@ -1,5 +1,5 @@
-import { faker } from "@faker-js/faker";
 import { randomUUID } from "node:crypto";
+import { faker } from "@faker-js/faker";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { app } from "@/app.ts";
 import { prisma } from "@/infra/database/prisma.ts";
@@ -80,7 +80,11 @@ describe("PATCH /accounts/reset/password (E2E)", () => {
 		const response = await app.inject({
 			method: "PATCH",
 			url: "/accounts/reset/password",
-			body: { code: "not-a-uuid", password: "newpass123", confirmPassword: "newpass123" },
+			body: {
+				code: "not-a-uuid",
+				password: "newpass123",
+				confirmPassword: "newpass123",
+			},
 		});
 
 		expect(response.statusCode).toBe(400);

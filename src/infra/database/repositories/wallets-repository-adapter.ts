@@ -1,9 +1,9 @@
 import type { PaginationParams } from "@/core/repositories/pagination-params.ts";
-import type { WalletsRepository } from "@/domain/transactions/app/repositories/wallets-repository.ts";
 import type {
 	FindByWalletAndUserIdParams,
 	FindManyWalletsResponse,
 } from "@/domain/transactions/app/repositories/types/wallet.ts";
+import type { WalletsRepository } from "@/domain/transactions/app/repositories/wallets-repository.ts";
 import type { Wallet } from "@/domain/transactions/enterprise/entities/wallet.ts";
 import { WalletMapper } from "../mappers/wallet-mapper.ts";
 import { prisma } from "../prisma.ts";

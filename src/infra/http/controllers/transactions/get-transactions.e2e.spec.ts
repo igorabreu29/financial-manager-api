@@ -18,12 +18,18 @@ async function authenticate() {
 		body: { email, password },
 	});
 
-	return { access_token: res.cookies.find(c => c.name === "access_token")!.value };
+	return {
+		access_token: res.cookies.find(c => c.name === "access_token")!.value,
+	};
 }
 
 async function createTransaction(
 	cookies: { access_token: string },
-	overrides: { description?: string; type?: "income" | "outcome"; price?: number } = {}
+	overrides: {
+		description?: string;
+		type?: "income" | "outcome";
+		price?: number;
+	} = {}
 ) {
 	const walletRes = await app.inject({
 		method: "POST",

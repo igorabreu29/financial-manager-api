@@ -1,7 +1,7 @@
 import type { FastifyPluginCallbackZod } from "fastify-type-provider-zod";
 import z from "zod";
-import { StatusCode } from "../../utils/status-code.ts";
 import { clearCookies } from "../../utils/set-auth-cookies.ts";
+import { StatusCode } from "../../utils/status-code.ts";
 import { makeSignOutUseCase } from "./factories/make-sign-out-use-case.ts";
 
 export const signOut: FastifyPluginCallbackZod = app => {

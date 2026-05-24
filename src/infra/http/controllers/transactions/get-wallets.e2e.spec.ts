@@ -18,7 +18,9 @@ async function authenticate() {
 		body: { email, password },
 	});
 
-	return { access_token: res.cookies.find(c => c.name === "access_token")!.value };
+	return {
+		access_token: res.cookies.find(c => c.name === "access_token")!.value,
+	};
 }
 
 describe("GET /wallets (E2E)", () => {
@@ -34,7 +36,12 @@ describe("GET /wallets (E2E)", () => {
 		const cookies = await authenticate();
 		const name = faker.finance.accountName();
 
-		await app.inject({ method: "POST", url: "/wallets", cookies, body: { name } });
+		await app.inject({
+			method: "POST",
+			url: "/wallets",
+			cookies,
+			body: { name },
+		});
 
 		const response = await app.inject({
 			method: "GET",

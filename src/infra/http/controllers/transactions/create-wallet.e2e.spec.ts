@@ -18,7 +18,9 @@ async function authenticate() {
 		body: { email, password },
 	});
 
-	return { access_token: res.cookies.find(c => c.name === "access_token")!.value };
+	return {
+		access_token: res.cookies.find(c => c.name === "access_token")!.value,
+	};
 }
 
 describe("POST /wallets (E2E)", () => {
@@ -59,7 +61,10 @@ describe("POST /wallets (E2E)", () => {
 			method: "POST",
 			url: "/wallets",
 			cookies,
-			body: { name: faker.finance.accountName(), description: "My main wallet" },
+			body: {
+				name: faker.finance.accountName(),
+				description: "My main wallet",
+			},
 		});
 
 		expect(response.statusCode).toBe(201);

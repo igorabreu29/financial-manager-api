@@ -18,7 +18,9 @@ async function authenticate() {
 		body: { email, password },
 	});
 
-	return { access_token: res.cookies.find(c => c.name === "access_token")!.value };
+	return {
+		access_token: res.cookies.find(c => c.name === "access_token")!.value,
+	};
 }
 
 describe("GET /categories (E2E)", () => {
@@ -49,9 +51,7 @@ describe("GET /categories (E2E)", () => {
 
 		expect(response.statusCode).toBe(200);
 		expect(response.json().categories).toEqual(
-			expect.arrayContaining([
-				expect.objectContaining({ name }),
-			])
+			expect.arrayContaining([expect.objectContaining({ name })])
 		);
 	});
 
@@ -59,7 +59,12 @@ describe("GET /categories (E2E)", () => {
 		const cookies = await authenticate();
 		const name = `unique-${faker.commerce.department()}`;
 
-		await app.inject({ method: "POST", url: "/categories", cookies, body: { name } });
+		await app.inject({
+			method: "POST",
+			url: "/categories",
+			cookies,
+			body: { name },
+		});
 
 		const response = await app.inject({
 			method: "GET",
@@ -69,7 +74,9 @@ describe("GET /categories (E2E)", () => {
 
 		expect(response.statusCode).toBe(200);
 		const { categories } = response.json();
-		expect(categories.every((c: { name: string }) => c.name.includes(name))).toBe(true);
+		expect(
+			categories.every((c: { name: string }) => c.name.includes(name))
+		).toBe(true);
 	});
 
 	it("returns 401 without authentication", async () => {

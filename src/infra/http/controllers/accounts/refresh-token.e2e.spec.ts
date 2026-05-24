@@ -43,7 +43,9 @@ describe("POST /accounts/refresh (E2E)", () => {
 
 		expect(response.statusCode).toBe(200);
 
-		const newAccessCookie = response.cookies.find(c => c.name === "access_token");
+		const newAccessCookie = response.cookies.find(
+			c => c.name === "access_token"
+		);
 		const newRefreshCookie = response.cookies.find(
 			c => c.name === "refresh_token"
 		);

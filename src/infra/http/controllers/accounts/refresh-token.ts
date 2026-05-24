@@ -1,8 +1,8 @@
 import type { FastifyPluginCallbackZod } from "fastify-type-provider-zod";
 import z from "zod";
 import { dispatchError } from "../../errors/dispatch-error.ts";
-import { StatusCode } from "../../utils/status-code.ts";
 import { setCookies } from "../../utils/set-auth-cookies.ts";
+import { StatusCode } from "../../utils/status-code.ts";
 import { makeRefreshTokenUseCase } from "./factories/make-refresh-token-use-case.ts";
 
 export const refreshToken: FastifyPluginCallbackZod = app => {

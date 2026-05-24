@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
 import { type Either, failure, success } from "@/core/either.ts";
 import {
-	RefreshToken,
 	REFRESH_TOKEN_TTL_MS,
+	RefreshToken,
 } from "../../enterprise/entities/refresh-token.ts";
 import type { Encrypter } from "../cryptography/encrypter.ts";
 import type { RefreshTokensRepository } from "../repositories/refresh-tokens-repository.ts";

@@ -43,8 +43,12 @@ describe("POST /accounts/sign-out (E2E)", () => {
 
 		expect(response.statusCode).toBe(200);
 
-		const clearedAccessCookie = response.cookies.find(c => c.name === "access_token");
-		const clearedRefreshCookie = response.cookies.find(c => c.name === "refresh_token");
+		const clearedAccessCookie = response.cookies.find(
+			c => c.name === "access_token"
+		);
+		const clearedRefreshCookie = response.cookies.find(
+			c => c.name === "refresh_token"
+		);
 
 		expect(clearedAccessCookie).toBeDefined();
 		expect(clearedRefreshCookie).toBeDefined();

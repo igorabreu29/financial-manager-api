@@ -1,7 +1,10 @@
 import { randomUUID } from "node:crypto";
 import { type Either, failure, success } from "@/core/either.ts";
+import {
+	REFRESH_TOKEN_TTL_MS,
+	RefreshToken,
+} from "../../enterprise/entities/refresh-token.ts";
 import type { User } from "../../enterprise/entities/user.ts";
-import { RefreshToken, REFRESH_TOKEN_TTL_MS } from "../../enterprise/entities/refresh-token.ts";
 import type { Encrypter } from "../cryptography/encrypter.ts";
 import type { Hasher } from "../cryptography/hasher.ts";
 import type { RefreshTokensRepository } from "../repositories/refresh-tokens-repository.ts";

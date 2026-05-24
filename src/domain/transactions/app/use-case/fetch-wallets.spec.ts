@@ -15,7 +15,11 @@ describe("Fetch Wallets Use Case", () => {
 	});
 
 	it("should return empty list when user has no wallets", async () => {
-		const result = await sut.execute({ userId: "user-1", page: 1, perPage: 10 });
+		const result = await sut.execute({
+			userId: "user-1",
+			page: 1,
+			perPage: 10,
+		});
 
 		expect(result.success()).toBe(true);
 
@@ -29,13 +33,22 @@ describe("Fetch Wallets Use Case", () => {
 		const userId = randomUUID();
 
 		await walletsRepository.create(
-			makeWallet({ userId: new UniqueEntityId(userId), createdAt: new Date("2024-01-01") })
+			makeWallet({
+				userId: new UniqueEntityId(userId),
+				createdAt: new Date("2024-01-01"),
+			})
 		);
 		await walletsRepository.create(
-			makeWallet({ userId: new UniqueEntityId(userId), createdAt: new Date("2024-02-01") })
+			makeWallet({
+				userId: new UniqueEntityId(userId),
+				createdAt: new Date("2024-02-01"),
+			})
 		);
 		await walletsRepository.create(
-			makeWallet({ userId: new UniqueEntityId(userId), createdAt: new Date("2024-03-01") })
+			makeWallet({
+				userId: new UniqueEntityId(userId),
+				createdAt: new Date("2024-03-01"),
+			})
 		);
 
 		const result = await sut.execute({ userId, page: 1, perPage: 2 });
@@ -50,9 +63,15 @@ describe("Fetch Wallets Use Case", () => {
 	});
 
 	it("should not return wallets from other users", async () => {
-		await walletsRepository.create(makeWallet({ userId: new UniqueEntityId("other-user") }));
+		await walletsRepository.create(
+			makeWallet({ userId: new UniqueEntityId("other-user") })
+		);
 
-		const result = await sut.execute({ userId: "user-1", page: 1, perPage: 10 });
+		const result = await sut.execute({
+			userId: "user-1",
+			page: 1,
+			perPage: 10,
+		});
 
 		expect(result.success()).toBe(true);
 

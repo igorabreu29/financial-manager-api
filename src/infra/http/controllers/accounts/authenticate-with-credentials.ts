@@ -2,8 +2,8 @@ import type { FastifyPluginCallbackZod } from "fastify-type-provider-zod";
 import z from "zod";
 import { dispatchError } from "../../errors/dispatch-error.ts";
 import { UserPresenter } from "../../presenters/user-presenter.ts";
-import { StatusCode } from "../../utils/status-code.ts";
 import { setCookies } from "../../utils/set-auth-cookies.ts";
+import { StatusCode } from "../../utils/status-code.ts";
 import { makeAuthenticateWithCredentialsUseCase } from "./factories/make-authenticate-with-credentials-use-case.ts";
 
 export const authenticateWithCredentials: FastifyPluginCallbackZod = app => {

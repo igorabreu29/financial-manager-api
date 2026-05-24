@@ -1,5 +1,5 @@
-import { faker } from "@faker-js/faker";
 import { randomUUID } from "node:crypto";
+import { faker } from "@faker-js/faker";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { app } from "@/app.ts";
 
@@ -19,7 +19,9 @@ async function authenticate() {
 		body: { email, password },
 	});
 
-	return { access_token: res.cookies.find(c => c.name === "access_token")!.value };
+	return {
+		access_token: res.cookies.find(c => c.name === "access_token")!.value,
+	};
 }
 
 describe("GET /categories/active (E2E)", () => {
@@ -50,7 +52,12 @@ describe("GET /categories/active (E2E)", () => {
 		});
 
 		const activeName = `active-${randomUUID().slice(0, 8)}`;
-		await app.inject({ method: "POST", url: "/categories", cookies, body: { name: activeName } });
+		await app.inject({
+			method: "POST",
+			url: "/categories",
+			cookies,
+			body: { name: activeName },
+		});
 
 		const response = await app.inject({
 			method: "GET",
@@ -60,16 +67,27 @@ describe("GET /categories/active (E2E)", () => {
 
 		expect(response.statusCode).toBe(200);
 		const { categories } = response.json();
-		expect(categories.every((c: { is_active: boolean }) => c.is_active)).toBe(true);
-		expect(categories.some((c: { name: string }) => c.name === activeName)).toBe(true);
-		expect(categories.some((c: { name: string }) => c.name === name)).toBe(false);
+		expect(categories.every((c: { is_active: boolean }) => c.is_active)).toBe(
+			true
+		);
+		expect(
+			categories.some((c: { name: string }) => c.name === activeName)
+		).toBe(true);
+		expect(categories.some((c: { name: string }) => c.name === name)).toBe(
+			false
+		);
 	});
 
 	it("filters active categories by name", async () => {
 		const cookies = await authenticate();
 		const name = `active-${randomUUID().slice(0, 8)}`;
 
-		await app.inject({ method: "POST", url: "/categories", cookies, body: { name } });
+		await app.inject({
+			method: "POST",
+			url: "/categories",
+			cookies,
+			body: { name },
+		});
 
 		const response = await app.inject({
 			method: "GET",
@@ -79,11 +97,16 @@ describe("GET /categories/active (E2E)", () => {
 
 		expect(response.statusCode).toBe(200);
 		const { categories } = response.json();
-		expect(categories.some((c: { name: string }) => c.name === name)).toBe(true);
+		expect(categories.some((c: { name: string }) => c.name === name)).toBe(
+			true
+		);
 	});
 
 	it("returns 401 without authentication", async () => {
-		const response = await app.inject({ method: "GET", url: "/categories/active" });
+		const response = await app.inject({
+			method: "GET",
+			url: "/categories/active",
+		});
 		expect(response.statusCode).toBe(401);
 	});
 });
